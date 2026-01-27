@@ -122,26 +122,40 @@ class ApiCommunication {
         );
         if (enableLoading) dismissLoader();
         if (response.statusCode == 200) {
-          Map<String, dynamic> responseData = response.data;
+          dynamic responseData = response.data; // Changed from Map<String, dynamic> to dynamic
           showSuccessMessage
               ? showSuccessSnackkbar(
-                message: successMessage ?? responseData['message'],
+                message: successMessage ?? (responseData is Map ? responseData['message'] : 'Success'),
               )
               : ();
           debugPrint('${response.statusCode}');
           logFullResponse(responseData);
 
+          // Handle generic access safely
+          Object? extractedData;
+          if (responseDataKey != ApiConstant.fullResponse && responseData is Map) {
+             extractedData = responseData[responseDataKey];
+          } else {
+             extractedData = responseData;
+          }
+
+          int? statusCode;
+          int? totalCount;
+          if (responseData is Map) {
+             statusCode = responseData[ApiConstant.statusCodeKey];
+             totalCount = responseData[ApiConstant.totalCount];
+          } else {
+             statusCode = 200;
+          }
+
           return ApiResponse(
             isSuccessful: true,
-            statusCode: responseData[ApiConstant.statusCodeKey],
-            data:
-                responseDataKey != ApiConstant.fullResponse
-                    ? responseData[responseDataKey]
-                    : responseData,
-            totalCount: responseData[ApiConstant.totalCount],
+            statusCode: statusCode,
+            data: extractedData,
+            totalCount: totalCount,
           );
         } else {
-          Map<String, dynamic> responseData = response.data;
+          Map<String, dynamic> responseData = response.data is Map ? response.data : {'message': 'Error ${response.statusCode}'};
           showErrorMessage
               ? showErrorSnackkbar(message: responseData['message'])
               : ();
