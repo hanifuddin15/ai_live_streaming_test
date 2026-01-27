@@ -4,6 +4,7 @@ import 'package:ip_camera_live_streaming/app/core/config/api_constant.dart';
 import 'package:ip_camera_live_streaming/app/core/models/camera.dart';
 import 'package:ip_camera_live_streaming/app/modules/home/controllers/home_controller.dart';
 import 'package:ip_camera_live_streaming/app/core/widgets/input_fields/primary_text_form_field.dart';
+import 'package:mjpeg_view/mjpeg_view.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({super.key});
@@ -53,7 +54,6 @@ class HomeView extends GetView<HomeController> {
 
             const SizedBox(height: 24),
 
-            // Camera Grid
             // Camera Grid
             LayoutBuilder(
               builder: (context, constraints) {
@@ -279,16 +279,15 @@ class HomeView extends GetView<HomeController> {
               ),
               clipBehavior: Clip.antiAlias,
               child: camera.isActive 
-              ? Image.network(
-                  controller.getStreamUrl(camera),
+              ? MjpegView(
+                  uri: controller.getStreamUrl(camera),
                   fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) {
-                    return const Center(child: Text('Stream Error', style: TextStyle(fontSize: 10)));
+                /*   errorBuilder: (context, error, stackTrace) {
+                     return const Center(child: Text('Stream Error', style: TextStyle(fontSize: 10)));
                   },
-                  loadingBuilder: (context, child, loadingProgress) {
-                     if (loadingProgress == null) return child;
+                  loadingBuilder: (context) {
                      return const Center(child: CircularProgressIndicator(strokeWidth: 2));
-                  },
+                  }, */
                 )
               : const Center(
                   child: Text('Camera OFF', style: TextStyle(color: Colors.grey, fontSize: 12)),
