@@ -126,17 +126,23 @@ class HomeController extends GetxController {
     // or fetch from AuthRepository if needed. 
     // Let's assume generic for now.
     
-    const baseUrl = ApiConstant.serverIpPort; 
+    const baseUrl = ApiConstant.aiCameraViewUrl; 
     final encodedId = Uri.encodeComponent(c.id??'');
     final encodedName = Uri.encodeComponent(c.name??'');
     
     // Query params
     final queryParams = <String, String>{
       'type': 'attendance',
-      // 'companyId': ... // Add if needed
     };
+    
+    if (c.companyId != null && c.companyId!.isNotEmpty) {
+      queryParams['companyId'] = c.companyId!;
+    }
+
     final queryString = Uri(queryParameters: queryParams).query;
 
-    return '$baseUrl/camera/recognition/stream/$encodedId/$encodedName?$queryString';
+    final streamUrl = '$baseUrl$encodedId/$encodedName?$queryString';
+    debugPrint('Stream URL for ${c.name}: $streamUrl');
+    return streamUrl;
   }
 }

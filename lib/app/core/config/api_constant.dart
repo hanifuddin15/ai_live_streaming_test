@@ -5,7 +5,8 @@ class ApiConstant {
 
   static const String serverIpPort = 'http://10.81.100.128:3001';
   static const String baseUrl = '$serverIpPort/api/v1/';
-
+static const String aiBaseUrl= 'http://10.81.100.128:8000';
+static const String aiCameraViewUrl= '$aiBaseUrl/camera/recognition/stream/';
   //Request
   static const int listViewPageSize = 10;
 

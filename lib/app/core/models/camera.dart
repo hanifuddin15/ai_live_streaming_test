@@ -8,10 +8,10 @@ class Camera {
   final String? updatedAt;
   final String? relayAgentId;
   final String? rtspUrlEnc;
-  final String? sendFps;
-  final String? sendWidth;
-  final String? sendHeight;
-  final String? jpegQuality;
+  final int? sendFps;
+  final int? sendWidth;
+  final int? sendHeight;
+  final int? jpegQuality;
   final bool isActive;
 
 
@@ -81,10 +81,10 @@ class Camera {
     String? updatedAt,
     String? relayAgentId,
     String? rtspUrlEnc,
-    String? sendFps,
-    String? sendWidth,
-    String? sendHeight,
-    String? jpegQuality,
+    int? sendFps,
+    int? sendWidth,
+    int? sendHeight,
+    int? jpegQuality,
   }) {
     return Camera(
       id: id ?? this.id,

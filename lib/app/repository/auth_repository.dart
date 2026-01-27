@@ -159,7 +159,7 @@ class AuthRepository {
    */
 
   bool isUserLoggedIn() {
-    if (hasIpPort && hasImagePath && hasToken) {
+    if (hasToken) {
       return true;
     } else {
       return false;

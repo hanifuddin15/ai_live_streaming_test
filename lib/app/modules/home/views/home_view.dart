@@ -22,7 +22,7 @@ class HomeView extends GetView<HomeController> {
           children: [
             // Header Info
             Text(
-              'Live face recognition + attendance (AI: ${ApiConstant.serverIpPort})',
+              'Live face recognition + attendance (AI: ${ApiConstant.aiBaseUrl})',
               style: TextStyle(color: Colors.grey[600], fontSize: 12),
             ),
             const SizedBox(height: 16),
@@ -237,7 +237,7 @@ class HomeView extends GetView<HomeController> {
                   children: [
                     Text(camera.name??'N/A', style: const TextStyle(fontWeight: FontWeight.bold), maxLines: 1, overflow: TextOverflow.ellipsis),
                     const SizedBox(height: 2),
-                    Text(camera.rtspUrl??'N/A', style: TextStyle(color: Colors.grey[400], fontSize: 10), maxLines: 1, overflow: TextOverflow.ellipsis),
+                    Text('${ApiConstant.aiCameraViewUrl}${camera.rtspUrl??'N/A'}', style: TextStyle(color: Colors.grey[400], fontSize: 10), maxLines: 1, overflow: TextOverflow.ellipsis),
                   ],
                 ),
               ),
