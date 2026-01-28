@@ -5,6 +5,7 @@ import 'package:ip_camera_live_streaming/app/core/models/camera.dart';
 import 'package:ip_camera_live_streaming/app/modules/home/controllers/home_controller.dart';
 import 'package:ip_camera_live_streaming/app/core/widgets/input_fields/primary_text_form_field.dart';
 import 'package:mjpeg_view/mjpeg_view.dart';
+import 'package:ip_camera_live_streaming/app/modules/home/views/local_camera_view.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({super.key});
@@ -190,11 +191,21 @@ class HomeView extends GetView<HomeController> {
                Obx(() => SizedBox(
                  height: 28,
                  child: OutlinedButton(
-                   onPressed: () {
+                   onPressed: () async {
                      if (controller.isLocalCameraActive.value) {
                        controller.stopLocalCamera();
                      } else {
-                       controller.startLocalCamera();
+                        // Check/Request permissions first before navigation (controller.startLocalCamera handles it, 
+                        // but we want to navigate immediately usually or wait?
+                        // Let's call startLocalCamera() which starts the stream. 
+                        // Once started (or concurrently), we navigate. 
+                        // Better to navigate and let the view/controller handle start?
+                        // Current startLocalCamera requests permission and starts stream.
+                        
+                        await controller.startLocalCamera();
+                        if (controller.isLocalCameraActive.value) {
+                           Get.to(() => const LocalCameraView());
+                        }
                      }
                    },
                    style: OutlinedButton.styleFrom(
@@ -214,7 +225,7 @@ class HomeView extends GetView<HomeController> {
             ],
           ),
           const SizedBox(height: 12),
-          // Stream Placeholder
+          // Stream Placeholder (Status Indicator now since view is separate)
           Expanded(
             child: Container(
               width: double.infinity,
@@ -224,12 +235,29 @@ class HomeView extends GetView<HomeController> {
               ),
               clipBehavior: Clip.antiAlias,
               child: Obx(() {
-                if (controller.isLocalCameraActive.value) {
-                  return MjpegView(
-                    uri: controller.getLocalStreamUrl(),
-                    fit: BoxFit.cover,
-                  );
-                }
+                 // We can still show the stream here if they come back or it's just an indicator
+                 if (controller.isLocalCameraActive.value) {
+                    return InkWell(
+                      onTap: () => Get.to(() => const LocalCameraView()), // Re-open if active
+                      child: Stack(
+                        fit: StackFit.expand,
+                        children: [
+                           // Preview of recognition only
+                           MjpegView(
+                            uri: controller.getLocalStreamUrl(),
+                            fit: BoxFit.cover,
+                          ),
+                          Center(
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              color: Colors.black54,
+                              child: const Text("Tap to Open Full Screen", style: TextStyle(color: Colors.white, fontSize: 10)),
+                            ),
+                          )
+                        ],
+                      ),
+                    );
+                 }
                 return const Center(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,

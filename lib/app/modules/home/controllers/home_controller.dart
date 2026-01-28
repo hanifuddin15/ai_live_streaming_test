@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ip_camera_live_streaming/app/core/models/camera.dart';
 import 'package:ip_camera_live_streaming/app/core/services/webrtc_service.dart';
+import 'package:ip_camera_live_streaming/app/core/utils/snackbar.dart';
 import 'package:ip_camera_live_streaming/app/repository/camera_repository.dart';
 import 'package:ip_camera_live_streaming/app/core/config/api_constant.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -22,6 +23,7 @@ class HomeController extends GetxController {
   
   RxBool get isLocalCameraActive => _webRTCService.isActive;
   String get localStreamError => _webRTCService.error.value;
+  dynamic get localRenderer => _webRTCService.localRenderer;
 
   // Form Controllers
   final TextEditingController newIdController = TextEditingController();
@@ -42,6 +44,8 @@ class HomeController extends GetxController {
     super.onClose();
   }
 
+
+//========================= Load Cameras========================//
   Future<void> loadCameras() async {
     isLoading.value = true;
     error.value = '';
@@ -55,6 +59,7 @@ class HomeController extends GetxController {
     isLoading.value = false;
   }
 
+//========================= Add Camera========================//
   Future<void> addCamera() async {
     final name = newNameController.text.trim();
     final url = newUrlController.text.trim();
@@ -80,6 +85,7 @@ class HomeController extends GetxController {
     );
   }
 
+//========================= Stop Camera========================//
   Future<void> stopCamera(Camera camera) async {
     // Optimistic update or wait? Let's wait.
     final result = await _repository.toggleCameraState(camera.id??'', false);
@@ -91,6 +97,7 @@ class HomeController extends GetxController {
     );
   }
 
+//========================= Start Camera========================//
   Future<void> startCamera(Camera camera) async {
     final result = await _repository.toggleCameraState(camera.id??'', true);
     result.fold(
@@ -101,6 +108,7 @@ class HomeController extends GetxController {
     );
   }
 
+//========================= Enable Attendance========================//
   Future<void> enableAttendance(Camera camera) async {
     final result = await _repository.toggleAttendance(camera.id??'', true);
     result.fold(
@@ -111,6 +119,7 @@ class HomeController extends GetxController {
     );
   }
 
+//========================= Disable Attendance========================//
    Future<void> disableAttendance(Camera camera) async {
     final result = await _repository.toggleAttendance(camera.id??'', false);
     result.fold(
@@ -120,8 +129,9 @@ class HomeController extends GetxController {
       },
     );
   }
-  
-  // Local Camera Methods
+
+//========================= Local Camera Methods========================//
+ //========================= Start Local Camera========================//
   Future<void> startLocalCamera() async {
     // Request Permissions first
     Map<Permission, PermissionStatus> statuses = await [
@@ -131,6 +141,7 @@ class HomeController extends GetxController {
 
     if (statuses[Permission.camera] != PermissionStatus.granted) {
       error.value = "Camera permission denied";
+      showErrorSnackkbar(message: 'Camera permission denied');
       return;
     }
 
@@ -141,18 +152,27 @@ class HomeController extends GetxController {
     );
   }
 
+  //========================= Stop Local Camera========================//
   Future<void> stopLocalCamera() async {
     _webRTCService.stopStream();
   }
 
+//========================= Switch Local Camera========================//
+  Future<void> switchLocalCamera() async {
+    await _webRTCService.switchCamera();
+  }
+
+//========================= Get Stream URL========================//
   String getStreamUrl(Camera c) {
     return _buildStreamUrl(c.id??'', c.name??'', c.companyId);
   }
 
+//========================= Get Local Stream URL========================//
   String getLocalStreamUrl() {
     return _buildStreamUrl(localCameraId, localCameraName, null);
   }
 
+//========================= Build Stream URL========================//
   String _buildStreamUrl(String id, String name, String? companyId) {
     const baseUrl = ApiConstant.aiCameraViewUrl; 
     final encodedId = Uri.encodeComponent(id);

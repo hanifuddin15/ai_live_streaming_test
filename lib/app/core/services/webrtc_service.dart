@@ -14,12 +14,22 @@ class WebRTCService extends GetxService {
   final RxBool isActive = false.obs;
   final RxString error = ''.obs;
 
+  final webRTC.RTCVideoRenderer localRenderer = webRTC.RTCVideoRenderer();
+
+  @override
+  void onInit() {
+    super.onInit();
+    localRenderer.initialize();
+  }
+
   @override
   void onClose() {
     stopStream();
+    localRenderer.dispose();
     super.onClose();
   }
 
+//========================= Start Stream========================//
   Future<void> startStream({
     required String cameraId,
     String? companyId,
@@ -44,7 +54,7 @@ class WebRTCService extends GetxService {
       };
 
       _localStream = await webRTC.navigator.mediaDevices.getUserMedia(mediaConstraints);
-      // Removed _localRenderer logic as we don't need to show self-view, only status/result
+      localRenderer.srcObject = _localStream;
 
       // 2. Create Peer Connection
       final Map<String, dynamic> configuration = {
@@ -61,11 +71,9 @@ class WebRTCService extends GetxService {
       });
 
       // 3. Connect WebSocket
-      // Construct WebSocket URL from AI_HOST
-      // http://10.81.100.128:8000 -> ws://10.81.100.128:8000/webrtc/signal
       final aiBase = ApiConstant.aiBaseUrl;
       final wsBase = aiBase.replaceFirst(RegExp(r'^http'), 'ws');
-      final wsUrl = '$wsBase/webrtc/signal'; // Remove trailing slash if any handled by simple string concat assumption
+      final wsUrl = '$wsBase/webrtc/signal';
 
       debugPrint('Connecting to WS: $wsUrl');
       _socket = await WebSocket.connect(wsUrl);
@@ -124,8 +132,10 @@ class WebRTCService extends GetxService {
     }
   }
 
+//========================= Stop Stream========================//
   Future<void> stopStream() async {
     try {
+      localRenderer.srcObject = null;
       _localStream?.getTracks().forEach((track) => track.stop());
       await _localStream?.dispose();
       _localStream = null;
@@ -142,6 +152,20 @@ class WebRTCService extends GetxService {
     }
   }
 
+//========================= Switch Camera========================//
+  Future<void> switchCamera() async {
+    if (_localStream != null) {
+      // Helper.switchCamera(_localStream!.getVideoTracks()[0]); 
+      // The above helper might be missing or deprecated depending on version/export.
+      // Using standard way:
+      final videoTrack = _localStream!.getVideoTracks().firstOrNull;
+      if (videoTrack != null) {
+        await webRTC.Helper.switchCamera(videoTrack);
+      }
+    }
+  }
+
+//========================= Handle WebSocket Message========================//
   void _handleWebSocketMessage(dynamic data, String cameraId) async {
     try {
       final Map<String, dynamic> msg = jsonDecode(data);
@@ -166,6 +190,7 @@ class WebRTCService extends GetxService {
     }
   }
 
+//========================= Send JSON========================//
   void _sendJson(Map<String, dynamic> data) {
     if (_socket != null && _socket!.readyState == WebSocket.open) {
       _socket!.add(jsonEncode(data));
