@@ -186,6 +186,31 @@ class HomeView extends GetView<HomeController> {
                    ],
                  ),
                ),
+               // Start/Stop Button
+               Obx(() => SizedBox(
+                 height: 28,
+                 child: OutlinedButton(
+                   onPressed: () {
+                     if (controller.isLocalCameraActive.value) {
+                       controller.stopLocalCamera();
+                     } else {
+                       controller.startLocalCamera();
+                     }
+                   },
+                   style: OutlinedButton.styleFrom(
+                     padding: const EdgeInsets.symmetric(horizontal: 8),
+                     side: BorderSide(color: controller.isLocalCameraActive.value ? Colors.red[200]! : Colors.green[200]!),
+                     backgroundColor: controller.isLocalCameraActive.value ? Colors.red[50] : Colors.green[50], 
+                   ),
+                   child: Text(
+                     controller.isLocalCameraActive.value ? 'Stop' : 'Start', 
+                     style: TextStyle(
+                       fontSize: 12, 
+                       color: controller.isLocalCameraActive.value ? Colors.red : Colors.green
+                     ),
+                   ),
+                 ),
+               ))
             ],
           ),
           const SizedBox(height: 12),
@@ -197,18 +222,39 @@ class HomeView extends GetView<HomeController> {
                 color: Colors.black,
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: const Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.videocam_off, color: Colors.white54),
-                    SizedBox(height: 8),
-                    Text('Local Stream Placeholder', style: TextStyle(color: Colors.white54, fontSize: 10)),
-                  ],
-                ),
-              ),
+              clipBehavior: Clip.antiAlias,
+              child: Obx(() {
+                if (controller.isLocalCameraActive.value) {
+                  return MjpegView(
+                    uri: controller.getLocalStreamUrl(),
+                    fit: BoxFit.cover,
+                  );
+                }
+                return const Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.videocam_off, color: Colors.white54),
+                      SizedBox(height: 8),
+                      Text('Start camera to view recognition', style: TextStyle(color: Colors.white54, fontSize: 10)),
+                    ],
+                  ),
+                );
+              }),
             ),
           ),
+          Obx(() {
+            if (controller.localStreamError.isNotEmpty) {
+              return Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Text(
+                  controller.localStreamError,
+                  style: const TextStyle(color: Colors.red, fontSize: 10),
+                ),
+              );
+            }
+            return const SizedBox.shrink();
+          }),
         ],
       ),
     );

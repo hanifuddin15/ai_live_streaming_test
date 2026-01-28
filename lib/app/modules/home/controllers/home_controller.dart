@@ -1,16 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ip_camera_live_streaming/app/core/models/camera.dart';
+import 'package:ip_camera_live_streaming/app/core/services/webrtc_service.dart';
 import 'package:ip_camera_live_streaming/app/repository/camera_repository.dart';
 import 'package:ip_camera_live_streaming/app/core/config/api_constant.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class HomeController extends GetxController {
   final CameraRepository _repository = CameraRepository.instance;
+  final WebRTCService _webRTCService = Get.put(WebRTCService());
 
   // State
   final RxList<Camera> cameras = <Camera>[].obs;
   final RxString error = ''.obs;
   final RxBool isLoading = false.obs;
+
+  // Local Camera State
+  // "cmkdpsq300000j7284bwluxh2" is the default ID from the React code
+  final String localCameraId = "cmkdpsq300000j7284bwluxh2"; 
+  final String localCameraName = "Mobile Camera";
+  
+  RxBool get isLocalCameraActive => _webRTCService.isActive;
+  String get localStreamError => _webRTCService.error.value;
 
   // Form Controllers
   final TextEditingController newIdController = TextEditingController();
@@ -109,40 +120,56 @@ class HomeController extends GetxController {
       },
     );
   }
+  
+  // Local Camera Methods
+  Future<void> startLocalCamera() async {
+    // Request Permissions first
+    Map<Permission, PermissionStatus> statuses = await [
+      Permission.camera,
+      Permission.microphone,
+    ].request();
+
+    if (statuses[Permission.camera] != PermissionStatus.granted) {
+      error.value = "Camera permission denied";
+      return;
+    }
+
+    _webRTCService.startStream(
+      cameraId: localCameraId,
+      companyId: null, // Add if needed
+      streamType: 'attendance'
+    );
+  }
+
+  Future<void> stopLocalCamera() async {
+    _webRTCService.stopStream();
+  }
 
   String getStreamUrl(Camera c) {
-    // Logic from page.tsx:
-    // ${AI_HOST}/camera/recognition/stream/${encodeURIComponent(c.id)}/${encodeURIComponent(c.name)}${streamQuery}
-    
-    // We need to construct streamQuery. 
-    // const params = new URLSearchParams();
-    // params.set("type", "attendance");
-    // if (companyId) params.set("companyId", companyId);
-    
-    // Assuming companyId comes from user token, but implemented simply for now.
-    // In page.tsx: const companyId = getCompanyIdFromToken();
-    // In our app, we might get it from User model.
-    // For now, let's hardcode or leave blank if we don't have it easily accessible, 
-    // or fetch from AuthRepository if needed. 
-    // Let's assume generic for now.
-    
+    return _buildStreamUrl(c.id??'', c.name??'', c.companyId);
+  }
+
+  String getLocalStreamUrl() {
+    return _buildStreamUrl(localCameraId, localCameraName, null);
+  }
+
+  String _buildStreamUrl(String id, String name, String? companyId) {
     const baseUrl = ApiConstant.aiCameraViewUrl; 
-    final encodedId = Uri.encodeComponent(c.id??'');
-    final encodedName = Uri.encodeComponent(c.name??'');
+    final encodedId = Uri.encodeComponent(id);
+    final encodedName = Uri.encodeComponent(name);
     
     // Query params
     final queryParams = <String, String>{
       'type': 'attendance',
     };
     
-    if (c.companyId != null && c.companyId!.isNotEmpty) {
-      queryParams['companyId'] = c.companyId!;
+    if (companyId != null && companyId.isNotEmpty) {
+      queryParams['companyId'] = companyId;
     }
 
     final queryString = Uri(queryParameters: queryParams).query;
 
     final streamUrl = '$baseUrl$encodedId/$encodedName?$queryString';
-    debugPrint('Stream URL for ${c.name}: $streamUrl');
     return streamUrl;
   }
 }
