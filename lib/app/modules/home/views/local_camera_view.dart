@@ -35,7 +35,7 @@ class LocalCameraView extends GetView<HomeController> {
             height: 160,
             child: Container(
               decoration: BoxDecoration(
-                border: Border.all(color: Colors.white.withOpacity(0.5), width: 1),
+                border: Border.all(color: Colors.white.withValues(alpha:0.5), width: 1),
                 borderRadius: BorderRadius.circular(8),
                 color: Colors.black,
               ),
@@ -91,7 +91,7 @@ class LocalCameraView extends GetView<HomeController> {
                if(controller.localStreamError.isNotEmpty) {
                  return Container(
                    padding: const EdgeInsets.all(8),
-                   color: Colors.red.withOpacity(0.7),
+                   color: Colors.red.withValues(alpha:0.7),
                    child: Text(controller.localStreamError, style: const TextStyle(color: Colors.white, fontSize: 12)),
                  );
                }

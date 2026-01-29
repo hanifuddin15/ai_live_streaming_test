@@ -1,7 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:ip_camera_live_streaming/app/core/services/api_communication.dart';
 import 'package:ip_camera_live_streaming/app/core/models/camera.dart';
-import 'package:ip_camera_live_streaming/app/core/models/api_response.dart';
 import 'package:ip_camera_live_streaming/app/core/error/failure.dart';
 import 'package:ip_camera_live_streaming/app/core/config/api_constant.dart';
 
@@ -16,7 +15,7 @@ class CameraRepository {
     try {
       final response = await _apiCommunication.doGetRequest(
         apiEndPoint: 'cameras', 
-        responseDataKey: ApiConstant.fullResponse, // Use fullResponse for raw List
+        responseDataKey: ApiConstant.fullResponse, 
       );
 
       if (response.isSuccessful && response.data != null) {
@@ -38,7 +37,7 @@ class CameraRepository {
   }) async {
     try {
       final response = await _apiCommunication.doPostRequest(
-        apiEndPoint: 'camera/add', // Assumed endpoint
+        apiEndPoint: 'camera/add', 
         requestData: {
           'name': name,
           'rtspUrl': rtspUrl,
@@ -56,7 +55,7 @@ class CameraRepository {
   Future<Either<Failure, bool>> toggleCameraState(String cameraId, bool isActive) async {
     try {
       final response = await _apiCommunication.doPostRequest(
-        apiEndPoint: isActive ? 'camera/start' : 'camera/stop', // Assumed endpoints
+        apiEndPoint: isActive ? 'camera/start' : 'camera/stop', 
         requestData: {'id': cameraId},
         showSuccessMessage: true,
       );
@@ -68,9 +67,8 @@ class CameraRepository {
 
   Future<Either<Failure, bool>> toggleAttendance(String cameraId, bool enable) async {
     try {
-        // Based on page.tsx: enableAttendance / disableAttendance
       final response = await _apiCommunication.doPostRequest(
-        apiEndPoint: enable ? 'camera/attendance/enable' : 'camera/attendance/disable', // Assumed endpoints
+        apiEndPoint: enable ? 'camera/attendance/enable' : 'camera/attendance/disable', 
         requestData: {'id': cameraId},
         showSuccessMessage: true,
       );

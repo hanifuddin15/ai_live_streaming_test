@@ -18,8 +18,9 @@ class HomeController extends GetxController {
 
   // Local Camera State
   // "cmkdpsq300000j7284bwluxh2" is the default ID from the React code
-  final String localCameraId = "cmkdpsq300000j7284bwluxh2"; 
-  final String localCameraName = "Mobile Camera";
+  // final String localCameraId = "laptop-cmkdpsq300000j7284bwluxh2"; 
+  final String localCameraId = "laptop-cmk9dp01a0000vpskicoq1gj0"; 
+  final String localCameraName = "Laptop Camera";
   
   RxBool get isLocalCameraActive => _webRTCService.isActive;
   String get localStreamError => _webRTCService.error.value;
@@ -147,7 +148,7 @@ class HomeController extends GetxController {
 
     _webRTCService.startStream(
       cameraId: localCameraId,
-      companyId: null, // Add if needed
+      companyId: null, 
       streamType: 'attendance'
     );
   }
@@ -190,6 +191,7 @@ class HomeController extends GetxController {
     final queryString = Uri(queryParameters: queryParams).query;
 
     final streamUrl = '$baseUrl$encodedId/$encodedName?$queryString';
+    // final streamUrl = 'http://10.81.100.128:8000/camera/recognition/stream/laptop-cmk9dp01a0000vpskicoq1gj0/Laptop%20Camera?type=attendance&companyId=cmk9dp01a0000vpskicoq1gj0';
     return streamUrl;
   }
 }

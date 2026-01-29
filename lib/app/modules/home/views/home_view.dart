@@ -170,7 +170,7 @@ class HomeView extends GetView<HomeController> {
         color: Colors.white,
         border: Border.all(color: Colors.grey[200]!),
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 4)],
+        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha:0.05), blurRadius: 4)],
       ),
       padding: const EdgeInsets.all(12),
       child: Column(
@@ -294,7 +294,7 @@ class HomeView extends GetView<HomeController> {
         color: Colors.white,
         border: Border.all(color: Colors.grey[200]!),
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 4)],
+        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha:0.05), blurRadius: 4)],
       ),
       padding: const EdgeInsets.all(12),
       child: Column(

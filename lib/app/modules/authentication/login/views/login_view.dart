@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ip_camera_live_streaming/app/core/config/core_validator.dart';
 import 'package:ip_camera_live_streaming/app/core/services/theme_service.dart';
-import 'package:ip_camera_live_streaming/app/core/utils/color.dart';
 import 'package:ip_camera_live_streaming/app/core/widgets/buttons/primary_button.dart';
 import 'package:ip_camera_live_streaming/app/core/widgets/input_fields/primary_text_form_field.dart';
 

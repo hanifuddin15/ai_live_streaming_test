@@ -2,19 +2,18 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:searchable_paginated_dropdown/searchable_paginated_dropdown.dart';
 
-import '../config/app_assets.dart';
 import '../utils/color.dart';
 
-const OutlineInputBorder ENABLED_BORDER = OutlineInputBorder(
+const OutlineInputBorder enableBorder = OutlineInputBorder(
   borderSide: BorderSide(width: 1, color: ENABLED_BORDER_COLOR),
 );
-const OutlineInputBorder FOCUSED_BORDER = OutlineInputBorder(
+const OutlineInputBorder focusedBorder = OutlineInputBorder(
   borderSide: BorderSide(width: 1, color: FOCUSED_BORDER_COLOR),
 );
-const OutlineInputBorder ERROR_BORDER = OutlineInputBorder(
+const OutlineInputBorder errorBorder = OutlineInputBorder(
   borderSide: BorderSide(width: 1, color: ERROR_BORDER_COLOR),
 );
-const OutlineInputBorder FOCUSED_ERROR_BORDER = OutlineInputBorder(
+const OutlineInputBorder focusedErrorBorder = OutlineInputBorder(
   borderSide: BorderSide(width: 1, color: FOCUSED_ERROR_BORDER_COLOR),
 );
 
