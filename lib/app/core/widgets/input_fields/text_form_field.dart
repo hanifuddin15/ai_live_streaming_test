@@ -3,16 +3,16 @@ import 'package:flutter/services.dart';
 
 import '../../utils/color.dart';
 
-const OutlineInputBorder ENABLED_BORDER = OutlineInputBorder(
+const OutlineInputBorder enabledBorder = OutlineInputBorder(
   borderSide: BorderSide(width: 1, color: enabledBorderColor),
 );
-const OutlineInputBorder FOCUSED_BORDER = OutlineInputBorder(
+const OutlineInputBorder focusedBorder = OutlineInputBorder(
   borderSide: BorderSide(width: 1, color: focusedBorderColor),
 );
-const OutlineInputBorder ERROR_BORDER = OutlineInputBorder(
+const OutlineInputBorder errorBorder = OutlineInputBorder(
   borderSide: BorderSide(width: 1, color: errorBorderColor),
 );
-const OutlineInputBorder FOCUSED_ERROR_BORDER = OutlineInputBorder(
+const OutlineInputBorder focusedErrorBorder = OutlineInputBorder(
   borderSide: BorderSide(width: 1, color: focusedErrorBorderColor),
 );
 
@@ -53,10 +53,10 @@ class LoginTextFormField extends StatelessWidget {
         suffixIcon: suffixIconButton,
         label: Text(label ?? ''),
         // contentPadding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-        enabledBorder: ENABLED_BORDER,
-        focusedBorder: FOCUSED_BORDER,
-        errorBorder: ERROR_BORDER,
-        focusedErrorBorder: FOCUSED_ERROR_BORDER,
+        enabledBorder: enabledBorder,
+        focusedBorder: focusedBorder,
+        errorBorder: errorBorder,
+        focusedErrorBorder: focusedErrorBorder,
       ),
       validator: (value) {
         if (value!.isEmpty) {
@@ -146,10 +146,10 @@ class PrimaryTextFormField extends StatelessWidget {
                       size: suffixIconSize ?? 12,
                     )
                     : null,
-            enabledBorder: ENABLED_BORDER,
-            focusedBorder: FOCUSED_BORDER,
-            errorBorder: ERROR_BORDER,
-            focusedErrorBorder: FOCUSED_ERROR_BORDER,
+            enabledBorder: enabledBorder,
+            focusedBorder: focusedBorder,
+            errorBorder: errorBorder,
+            focusedErrorBorder: focusedErrorBorder,
           ),
       validator:
           validator ??
@@ -208,10 +208,10 @@ class SecondaryTextFormField extends StatelessWidget {
         suffixIcon: Icon(suffixIcon, color: suffixIconColor),
         label: Text(label ?? ''),
         // contentPadding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-        enabledBorder: ENABLED_BORDER,
-        focusedBorder: FOCUSED_BORDER,
-        errorBorder: ERROR_BORDER,
-        focusedErrorBorder: FOCUSED_ERROR_BORDER,
+        enabledBorder: enabledBorder,
+        focusedBorder: focusedBorder,
+        errorBorder: errorBorder,
+        focusedErrorBorder: focusedErrorBorder,
       ),
       validator:
           validator ??
@@ -270,10 +270,10 @@ class ClickableTextFormField extends StatelessWidget {
         ),
         label: Text(label ?? ''),
         // contentPadding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-        enabledBorder: ENABLED_BORDER,
-        focusedBorder: FOCUSED_BORDER,
-        errorBorder: ERROR_BORDER,
-        focusedErrorBorder: FOCUSED_ERROR_BORDER,
+        enabledBorder: enabledBorder,
+        focusedBorder: focusedBorder,
+        errorBorder: errorBorder,
+        focusedErrorBorder: focusedErrorBorder,
       ),
       validator: (value) {
         if (value!.isEmpty) {

@@ -60,8 +60,11 @@ class HomeView extends GetView<HomeController> {
               builder: (context, constraints) {
                 // Responsive grid logic
                 int crossAxisCount = 1;
-                if (constraints.maxWidth > 900) crossAxisCount = 4;
-                else if (constraints.maxWidth > 600) crossAxisCount = 2;
+                if (constraints.maxWidth > 900) {
+                  crossAxisCount = 4;
+                } else if (constraints.maxWidth > 600) {
+                  crossAxisCount = 2;
+                }
 
                 return Obx(() {
                   final cams = controller.cameras;

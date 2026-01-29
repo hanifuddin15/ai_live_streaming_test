@@ -54,7 +54,7 @@ class LoginController extends GetxController {
    * ┗==================================================================================================┛
    */
 
-  loginUser({required String userId, required String password}) async {
+  Future<void>loginUser({required String userId, required String password}) async {
     UserModel? userModel = await _repository.loginUser(
       userId: userId,
       password: password,
