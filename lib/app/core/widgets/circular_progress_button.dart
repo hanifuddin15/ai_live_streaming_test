@@ -9,9 +9,9 @@ class CircularProgressButton extends StatelessWidget {
   const CircularProgressButton({
     super.key,
     required this.text,
-    this.textColor = PRIMARY_COLOR,
+    this.textColor = primaryColor,
     this.backgroundColor = Colors.white,
-    this.progressColor = PRIMARY_COLOR,
+    this.progressColor = primaryColor,
     this.fontSize = 18,
     required this.onProgressSuccess,
   });

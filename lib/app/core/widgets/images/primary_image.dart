@@ -134,7 +134,7 @@ class RoundedNetworkImage extends StatelessWidget {
     required this.imageUrl,
     this.radius = 16,
     this.border = 0,
-    this.borderColor = PRIMARY_SWATCH,
+    this.borderColor = primarySwatch,
   });
 
   final String imageUrl;

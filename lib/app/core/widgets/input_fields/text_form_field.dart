@@ -4,16 +4,16 @@ import 'package:flutter/services.dart';
 import '../../utils/color.dart';
 
 const OutlineInputBorder ENABLED_BORDER = OutlineInputBorder(
-  borderSide: BorderSide(width: 1, color: ENABLED_BORDER_COLOR),
+  borderSide: BorderSide(width: 1, color: enabledBorderColor),
 );
 const OutlineInputBorder FOCUSED_BORDER = OutlineInputBorder(
-  borderSide: BorderSide(width: 1, color: FOCUSED_BORDER_COLOR),
+  borderSide: BorderSide(width: 1, color: focusedBorderColor),
 );
 const OutlineInputBorder ERROR_BORDER = OutlineInputBorder(
-  borderSide: BorderSide(width: 1, color: ERROR_BORDER_COLOR),
+  borderSide: BorderSide(width: 1, color: errorBorderColor),
 );
 const OutlineInputBorder FOCUSED_ERROR_BORDER = OutlineInputBorder(
-  borderSide: BorderSide(width: 1, color: FOCUSED_ERROR_BORDER_COLOR),
+  borderSide: BorderSide(width: 1, color: focusedErrorBorderColor),
 );
 
 class LoginTextFormField extends StatelessWidget {

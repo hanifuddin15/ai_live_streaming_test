@@ -16,7 +16,7 @@ class PrimaryRoundButton extends StatelessWidget {
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-        backgroundColor: PRIMARY_COLOR,
+        backgroundColor: primaryColor,
         foregroundColor: Colors.white,
         padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
         textStyle: const TextStyle(fontSize: 16),

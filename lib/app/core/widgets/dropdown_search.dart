@@ -5,16 +5,16 @@ import 'package:searchable_paginated_dropdown/searchable_paginated_dropdown.dart
 import '../utils/color.dart';
 
 const OutlineInputBorder enableBorder = OutlineInputBorder(
-  borderSide: BorderSide(width: 1, color: ENABLED_BORDER_COLOR),
+  borderSide: BorderSide(width: 1, color: enabledBorderColor),
 );
 const OutlineInputBorder focusedBorder = OutlineInputBorder(
-  borderSide: BorderSide(width: 1, color: FOCUSED_BORDER_COLOR),
+  borderSide: BorderSide(width: 1, color: focusedBorderColor),
 );
 const OutlineInputBorder errorBorder = OutlineInputBorder(
-  borderSide: BorderSide(width: 1, color: ERROR_BORDER_COLOR),
+  borderSide: BorderSide(width: 1, color: errorBorderColor),
 );
 const OutlineInputBorder focusedErrorBorder = OutlineInputBorder(
-  borderSide: BorderSide(width: 1, color: FOCUSED_ERROR_BORDER_COLOR),
+  borderSide: BorderSide(width: 1, color: focusedErrorBorderColor),
 );
 
 class PrimaryDropdownSearch<T> extends StatelessWidget {

@@ -3,18 +3,18 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_webrtc/flutter_webrtc.dart' as webRTC;
+import 'package:flutter_webrtc/flutter_webrtc.dart' as webrtc;
 import 'package:get/get.dart';
 import 'package:ip_camera_live_streaming/app/core/config/api_constant.dart';
 
 class WebRTCService extends GetxService {
-  webRTC.RTCPeerConnection? _peerConnection;
-  webRTC.MediaStream? _localStream;
+  webrtc.RTCPeerConnection? _peerConnection;
+  webrtc.MediaStream? _localStream;
   WebSocket? _socket;
   final RxBool isActive = false.obs;
   final RxString error = ''.obs;
 
-  final webRTC.RTCVideoRenderer localRenderer = webRTC.RTCVideoRenderer();
+  final webrtc.RTCVideoRenderer localRenderer = webrtc.RTCVideoRenderer();
 
   @override
   void onInit() {
@@ -53,7 +53,7 @@ class WebRTCService extends GetxService {
         }
       };
 
-      _localStream = await webRTC.navigator.mediaDevices.getUserMedia(mediaConstraints);
+      _localStream = await webrtc.navigator.mediaDevices.getUserMedia(mediaConstraints);
       localRenderer.srcObject = _localStream;
 
       // 2. Create Peer Connection
@@ -63,7 +63,7 @@ class WebRTCService extends GetxService {
         ]
       };
 
-      _peerConnection = await webRTC.createPeerConnection(configuration);
+      _peerConnection = await webrtc.createPeerConnection(configuration);
 
       // Add Tracks
       _localStream!.getTracks().forEach((track) {
@@ -111,7 +111,7 @@ class WebRTCService extends GetxService {
       };
 
       // 5. Create Offer
-      webRTC.RTCSessionDescription offer = await _peerConnection!.createOffer();
+      webrtc.RTCSessionDescription offer = await _peerConnection!.createOffer();
       await _peerConnection!.setLocalDescription(offer);
 
       _sendJson({
@@ -155,12 +155,9 @@ class WebRTCService extends GetxService {
 //========================= Switch Camera========================//
   Future<void> switchCamera() async {
     if (_localStream != null) {
-      // Helper.switchCamera(_localStream!.getVideoTracks()[0]); 
-      // The above helper might be missing or deprecated depending on version/export.
-      // Using standard way:
       final videoTrack = _localStream!.getVideoTracks().firstOrNull;
       if (videoTrack != null) {
-        await webRTC.Helper.switchCamera(videoTrack);
+        await webrtc.Helper.switchCamera(videoTrack);
       }
     }
   }
@@ -173,12 +170,12 @@ class WebRTCService extends GetxService {
       if (msg.containsKey('sdp') && msg['cameraId'] == cameraId) {
         final sdp = msg['sdp'];
         await _peerConnection!.setRemoteDescription(
-          webRTC.RTCSessionDescription(sdp['sdp'], sdp['type']),
+          webrtc.RTCSessionDescription(sdp['sdp'], sdp['type']),
         );
       } else if (msg.containsKey('ice') && msg['cameraId'] == cameraId) {
         final ice = msg['ice'];
         await _peerConnection!.addCandidate(
-          webRTC.RTCIceCandidate(
+          webrtc.RTCIceCandidate(
             ice['candidate'],
             ice['sdpMid'],
             ice['sdpMLineIndex'],
